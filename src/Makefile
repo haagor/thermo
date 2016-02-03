@@ -1,11 +1,16 @@
-CC=gcc 
-CFLAGS=-Wall -std=c99
+CC = gcc
 
-all: main
-main: main.o
-main.o: main.c
+OBJ_FICHIER = main.c
 
-clean:
-	rm -f main main.o
-run: main
-	./main
+EXE = main
+
+OPTION = -std=c11
+
+all: $(EXE)
+	
+#Exécutable
+main:
+	$(CC) $(OPTION) $(OBJ_FICHIER) -lm -o $(EXE)
+
+clean: 
+	rm -vf main
