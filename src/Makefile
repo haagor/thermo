@@ -1,5 +1,5 @@
 CC=gcc 
-CFLAGS=-Wall
+CFLAGS=-Wall -std=c99
 
 all: main
 main: main.o
