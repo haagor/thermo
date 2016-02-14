@@ -6,13 +6,22 @@
 
 
 
-#define TEMP_FROID 0
+#define TEMP_FROID 25
 #define TEMP_CHAUD 256
+
+typedef struct {
+  float current;
+  float new;
+} Mat;
 
 void getParameter(int argc, char *argv[]);
 void constructionMatrice(int i);
 void afficheMatrice();
+void afficheCurrentMatrice();
+void afficheNewMatrice();
 void zoneChaude();
+void initiateCold();
 void libererMem();
+void calcul();
 
 
