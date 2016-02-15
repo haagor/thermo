@@ -198,7 +198,13 @@ void run(int size, float T, int nb_iter, int print)
 {
 	int n = size + 4;							// [0-9]
 	int N = (1 << n) + 2;						// taille de la matrice	(+2 pour le bord froid)
-	struct Cell matrice[N*N];					// init matrice
+	struct Cell* matrice;						// init matrice
+	matrice = (struct Cell*)malloc(N*N*sizeof(struct Cell));
+	if (matrice == 0)
+	{
+		fprintf(stderr, "core dump\n");
+		return;
+	}
 
 	init_matrix(n, T, matrice);
 	iter(matrice, n, N, T, nb_iter);
@@ -208,6 +214,7 @@ void run(int size, float T, int nb_iter, int print)
 		printf("\n -------------------------------");
 		printf("\n");
 	}
+	free(matrice);
 }
 
 int cmp_double (const void * a, const void * b)
@@ -240,7 +247,8 @@ int main(int argc, char *argv[])
 	int cpu  = 0;
 	int user = 0;
 	while ((c = getopt(argc, argv, "s:i:mM")) != -1) {
-		switch (c) {
+		switch (c)
+		{
 			case 's':
 			sizes=optarg;
 			debug = 1;
@@ -303,9 +311,21 @@ int main(int argc, char *argv[])
 			list_c[i] = total_c;
 		}
 
-		total_t = average(list_t, 10);
-		total_c = average(list_c, 10);
-		printf("Size: %d, total time taken by user: %f\n", size, total_t);
-		printf("Size: %d, total time taken by CPU: %f\n", size, total_c);
+		if (user == 1)
+		{
+			total_t = average(list_t, 10);
+			printf("Size: %d, total time taken by user: %f\n", size, total_t);
+		}
+		if (cpu == 1)
+		{
+			total_c = average(list_c, 10);
+			printf("Size: %d, total time taken by CPU: %f\n", size, total_c);
+		}
+
+// rapport occupation memoire
+		struct rusage ru;
+		getrusage(RUSAGE_SELF, &ru);
+    	long maxrss = ru.ru_maxrss;
+ 		printf("RUSAGE :ru_maxrss => %ld [kilobytes], %ld [struct Cell], %ld [nb Cell]\n", maxrss, maxrss / sizeof(struct Cell) * 1024, (2 + (1 << (size + 4))) * (2 + (1 << (size + 4))));
 	}
 }
