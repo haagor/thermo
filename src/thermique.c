@@ -18,8 +18,8 @@ int main(int argc, char *argv[]){
   zoneChaude();
   afficheCurrentMatrice();
   calcul();
-  zoneChaude();
-  afficheCurrentMatrice();
+ // zoneChaude();
+  afficheNewMatrice();
   libererMem();
 }
 
@@ -52,6 +52,9 @@ void getParameter(int argc, char *argv[]){
             printf("option i");
             break;
           case 'e':
+          if(optarg>0){
+                printf("seul l'option itératif est implémenter pour le moment.");
+          }
             printf("option e");
             break;
           case 't':
@@ -121,7 +124,7 @@ void calcul(){
 
     }
   }
- //Calcul de la diffusion Verticale
+ /*//Calcul de la diffusion Verticale
 for(int i=0; i<tailleMatrice;i++){
     for(int j=0;j<tailleMatrice;j++){
       if(i==0){
@@ -139,7 +142,7 @@ for(int i=0; i<tailleMatrice;i++){
     Matrice[tailleMatrice*i+j].current+=(Matrice[tailleMatrice*i+j].new*4)/6;
 
     }
-  }
+  }*/
 }
 
 

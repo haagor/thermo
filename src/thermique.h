@@ -6,8 +6,8 @@
 
 
 
-#define TEMP_FROID 25
-#define TEMP_CHAUD 256
+#define TEMP_FROID 0
+#define TEMP_CHAUD 36
 
 typedef struct {
   float current;
