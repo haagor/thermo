@@ -8,18 +8,21 @@
 
 
 int tailleMatrice,taille,zoneDeb,zoneFin;
+int iteration;
 Mat* Matrice;
 
 
 int main(int argc, char *argv[]){
   getParameter(argc,argv);
   constructionMatrice(tailleMatrice);
-  //initiateCold();
+  initiateCold();
   zoneChaude();
-  afficheCurrentMatrice();
-  calcul();
-  zoneChaude();
-  afficheCurrentMatrice();
+  for (i=0;i<iteration;i++){
+        afficheCurrentMatrice();
+        calcul();
+        zoneChaude();
+        afficheCurrentMatrice();
+}
   libererMem();
 }
 
@@ -49,7 +52,7 @@ void getParameter(int argc, char *argv[]){
             printf("option a");
             break;
           case 'i':
-            printf("option i");
+            iteration=atoi(optarg);
             break;
           case 'e':
             printf("option e");
