@@ -1,3 +1,10 @@
+/*
+* Auteurs : Simon Paris / Gregory Robin
+* 16/03/16
+*
+* main
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -6,50 +13,31 @@
 #include <sys/resource.h>
 
 #include "heaTransfert.h"
-
+#include "fct.h"
 
 // https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/getopt.html
 
-
-
-int cmp_double (const void * a, const void * b)
-{
-	return ( *(double*)a - *(double*)b );
-}
-
-double average(double* list, int n)
-{
-	qsort(list, n, sizeof(double), cmp_double);
-	double res = 0;
-	for (int i = 1; i < (n - 1); i++)
-	{
-		res += list[i];
-	}
-	res = res /  (n - 2);
-	return res;
-}
 
 int debug = 0;
 
 int main(int argc, char *argv[])
 {
+
+	// ----- gestion des arguments -----
 	extern char *optarg;
 	extern int optind;
 	static char usage[] = "usage: %s -s sizes -i nb_iter  [-mM]\n";
 	int c;
 	char* sizes = 0;
-	int nb_iter = -1;
 	int cpu  = 0;
 	int user = 0;
-	while ((c = getopt(argc, argv, "s:i:mM")) != -1) {
+	int print = 0;
+	int nb_iter = -1;
+	while ((c = getopt(argc, argv, "s:mMai:")) != -1) {
 		switch (c)
 		{
 			case 's':
 			sizes=optarg;
-			debug = 1;
-			break;
-			case 'i':
-			nb_iter=atoi(optarg);
 			debug = 1;
 			break;
 			case 'm':
@@ -57,6 +45,13 @@ int main(int argc, char *argv[])
 			break;
 			case 'M':
 			user = 1;
+			break;
+			case 'a':
+			print=1;
+			break;
+			case 'i':
+			nb_iter=atoi(optarg);
+			debug = 1;
 			break;
 		}
 	}
@@ -71,23 +66,21 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	printf("sizes = %s\n", sizes);
-	printf("nb_iter = %d\n", nb_iter);
-	printf("cpu = %d\n",  cpu);
-	printf("user = %d\n", user);
-
+	// ----- boucle 'for' pour enchainer les executions (-s024) -----
 	for (int i = 0; i < strlen(sizes); i++)
 	{
 		int size = sizes[i] - '0';
 
+		// ces 2 lists memorisent le temps cpu et user pour pouvoir calculer la moyenne
 		double list_t[10];
 		double list_c[10];
+
 		time_t start_t, end_t;
 		clock_t start_c, end_c;
 		double total_t, total_c;
 
 		int nb_globalIter = 1;
-		if (cpu || user)
+		if (cpu || user) // si il a l'option -m ou -M on execute 10 fois
 		{
 			nb_globalIter = 10;
 		}
@@ -96,7 +89,7 @@ int main(int argc, char *argv[])
 		{
 			start_t = time(NULL);
 			start_c = clock();
-			run(size, 36, nb_iter, 0);
+			run(size, 36, nb_iter, print);
 			end_t = time(NULL);
 			end_c = clock();
 
@@ -117,7 +110,7 @@ int main(int argc, char *argv[])
 			printf("Size: %d, total time taken by CPU: %f\n", size, total_c);
 		}
 
-// rapport occupation memoire
+		// quelques infos sur l'occupation memoire pour le rapport
 		struct rusage ru;
 		getrusage(RUSAGE_SELF, &ru);
     	long maxrss = ru.ru_maxrss;

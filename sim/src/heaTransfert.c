@@ -1,8 +1,17 @@
+/*
+* Auteurs : Simon Paris / Gregory Robin
+* 16/03/16
+*
+* fonctions relatives aux itérations de transfert de chaleur
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "heaTransfert.h"
 
+
+// transmet la chaleur verticalement
 void verticale_iter_impair(struct Cell* matrix, int N)
 {
 	struct Cell* cUp;
@@ -32,6 +41,7 @@ void verticale_iter_impair(struct Cell* matrix, int N)
 	}
 }
 
+// transmet la chaleur horizontalement
 void horizontale_iter_pair(struct Cell* matrix, int N)
 {
 	struct Cell* cLeft;
@@ -61,6 +71,7 @@ void horizontale_iter_pair(struct Cell* matrix, int N)
 	}
 }
 
+// execute une iteration, cad transfert horizontale, verticale, et temperature du centre remit a ca valeur T
 void iter(struct Cell* matrix, int n, int N, float T, int nb_iter)
 {
 	for (int w = 0; w < nb_iter; w++) // nombre d'itération verticale
@@ -72,11 +83,12 @@ void iter(struct Cell* matrix, int n, int N, float T, int nb_iter)
 	}
 }
 
+// instancie, initialise la matrice et lance les iterations
 void run(int size, float T, int nb_iter, int print)
 {
 	int n = size + 4;							// [0-9]
 	int N = (1 << n) + 2;						// taille de la matrice	(+2 pour le bord froid)
-	struct Cell* matrice;						// init matrice
+	struct Cell* matrice;						// instant matrice
 	matrice = (struct Cell*)malloc(N*N*sizeof(struct Cell));
 	if (matrice == 0)
 	{
