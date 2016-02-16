@@ -1,16 +1,20 @@
+
 CC = gcc
+CCFLAGS = -g -std=c11 -Wall
 
-OBJ_FICHIERS = main.c
+default: main
 
-EXE = main
+main:  main.o matrix.o heaTransfert.o 
+	$(CC) $(CCFLAGS) -o main main.o matrix.o heaTransfert.o
 
-OPTION = -std=c11
+main.o:  main.c matrix.h heaTransfert.h
+	$(CC) $(CCFLAGS) -c main.c
 
-all: $(EXE)
-	
-#Exécutable
-main: $(OBJ_FICHIERS)
-	$(CC) $(OPTION) $(OBJ_FICHIERS) -o $(EXE)
+matrix.o:  matrix.c matrix.h
+	$(CC) $(CCFLAGS) -c matrix.c
+
+heaTransfert.o:  heaTransfert.c heaTransfert.h matrix.h 
+	$(CC) $(CCFLAGS) -c heaTransfert.c
 
 clean: 
-	rm -vf main
+	$(RM) count *.o *~
