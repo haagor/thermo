@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-INITIAL_FILES = thermique.cpp
-=======
 INITIAL_FILES = thermique.c
->>>>>>> Stashed changes
 ALL = thermique
 CXX_FLAGS= -Wall -std=c11
 CXX_LINK=gcc
@@ -23,8 +19,4 @@ thermique.o : thermique.h
 clear : 
 	-rm -f *.o
 clean :
-<<<<<<< Updated upstream
 	-rm -f *.o $(ALL)
-=======
-	-rm -f *.o $(ALL)
->>>>>>> Stashed changes
