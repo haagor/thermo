@@ -3,12 +3,14 @@
 #include <unistd.h>
 #include <getopt.h>
 #include "thermique.h"
+#include <time.h>
 
 
 
 
 int tailleMatrice,taille,zoneDeb,zoneFin;
 int iteration;
+clock_t start_t, end_t, total_t;
 Mat* Matrice;
 
 
@@ -17,13 +19,17 @@ int main(int argc, char *argv[]){
   constructionMatrice(tailleMatrice);
   initiateCold();
   zoneChaude();
-  for (i=0;i<iteration;i++){
-        afficheCurrentMatrice();
+  afficheCurrentMatrice();
+start_t = clock();
+  for (int i=0;i<iteration;i++){
         calcul();
         zoneChaude();
-        afficheCurrentMatrice();
-}
-  libererMem();
+} 
+end_t = clock();
+total_t = (double)(end_t - start_t); // CLOCKS_PER_SEC;
+printf("Total time taken by CPU: %f\n", total_t  );
+afficheCurrentMatrice();
+libererMem();
 }
 
 //calcul pour trouver la cellule d'une matrice taille*i+j
@@ -170,7 +176,7 @@ void zoneChaude(){
 }
 /*###################################################################
 ## initialisation de la temperature froide avec la valeur de TEMP_FROID
-###################################################################
+###################################################################*/
 void initiateCold(){
   int index;
   for(int i=0; i<tailleMatrice;i++){
@@ -180,7 +186,6 @@ void initiateCold(){
     }
   }
 }
-*/
 
 void libererMem(){
   free(Matrice);
