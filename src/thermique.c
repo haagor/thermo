@@ -26,8 +26,7 @@ start_t = clock();
         zoneChaude();
 } 
 end_t = clock();
-total_t = (double)(end_t - start_t); // CLOCKS_PER_SEC;
-printf("Total time taken by CPU: %f\n", total_t  );
+printf("Total time taken by CPU: %ld\n", end_t  );
 afficheCurrentMatrice();
 libererMem();
 }
