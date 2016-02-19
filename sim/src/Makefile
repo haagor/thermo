@@ -1,3 +1,4 @@
+# make && time ./main -s 3 -M -m -i 10000
 
 CC = gcc
 CCFLAGS = -g -std=c11 -Wall

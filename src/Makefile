@@ -20,4 +20,3 @@ clear :
 	-rm -f *.o
 clean :
 	-rm -f *.o $(ALL)
-

@@ -1,6 +1,6 @@
 /*
 * Auteurs : Simon Paris / Gregory Robin
-* 16/03/16
+* 19/03/16
 *
 * fonctions relatives aux itérations de transfert de chaleur
 */
@@ -72,7 +72,7 @@ void horizontale_iter_pair(struct Cell* matrix, int N)
 }
 
 // execute une iteration, cad transfert horizontale, verticale, et temperature du centre remit a ca valeur T
-void iter(struct Cell* matrix, int n, int N, float T, int nb_iter)
+void iter(struct Cell* matrix, int n, int N, float T, int nb_iter, int print)
 {
 	for (int w = 0; w < nb_iter; w++) // nombre d'itération verticale
 	{
@@ -80,6 +80,10 @@ void iter(struct Cell* matrix, int n, int N, float T, int nb_iter)
 		verticale_iter_impair(matrix, N);
 
 		rinit_matrix(n, T, matrix);
+	}
+	if (print)
+	{
+		print_a(matrix, N, n-4);
 	}
 }
 
@@ -97,12 +101,7 @@ void run(int size, float T, int nb_iter, int print)
 	}
 
 	init_matrix(n, T, matrice);
-	iter(matrice, n, N, T, nb_iter);
-	if (print)
-	{
-		print_matrix(matrice, N, 0);
-		printf("\n -------------------------------");
-		printf("\n");
-	}
+	iter(matrice, n, N, T, nb_iter, print);
+
 	free(matrice);
 }

@@ -1,6 +1,6 @@
 /*
 * Auteurs : Simon Paris / Gregory Robin
-* 16/03/16
+* 19/03/16
 *
 * main
 */
@@ -15,8 +15,6 @@
 #include "heaTransfert.h"
 #include "fct.h"
 
-// https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/getopt.html
-
 
 int debug = 0;
 
@@ -24,6 +22,7 @@ int main(int argc, char *argv[])
 {
 
 	// ----- gestion des arguments -----
+	// https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/getopt.html
 	extern char *optarg;
 	extern int optind;
 	static char usage[] = "usage: %s -s sizes -i nb_iter  [-mM]\n";
@@ -90,6 +89,7 @@ int main(int argc, char *argv[])
 			start_t = time(NULL);
 			start_c = clock();
 			run(size, 36, nb_iter, print);
+			print = 0; 				// il est inutile d'afficher les 10 matrices. On affiche la premiere
 			end_t = time(NULL);
 			end_c = clock();
 
@@ -110,10 +110,21 @@ int main(int argc, char *argv[])
 			printf("Size: %d, total time taken by CPU: %f\n", size, total_c);
 		}
 
-		// quelques infos sur l'occupation memoire pour le rapport
+
+		// Rapport: occupation memoire et ecriture dans un fichier pour constituer le rapport
+/*		FILE *f = fopen("../res.txt", "a");
+		if (f == NULL)
+		{
+			printf("Error opening file!\n");
+			exit(1);
+		}
+
 		struct rusage ru;
 		getrusage(RUSAGE_SELF, &ru);
-    	long maxrss = ru.ru_maxrss;
- 		printf("RUSAGE :ru_maxrss => %ld [kilobytes], %ld [struct Cell], %d [nb Cell]\n", maxrss, maxrss / sizeof(struct Cell) * 1024, (2 + (1 << (size + 4))) * (2 + (1 << (size + 4))));
+		long maxrss = ru.ru_maxrss;
+		printf("RUSAGE :ru_maxrss => %ld [kilobytes], %ld [struct Cell], %d [nb Cell]\n", maxrss, maxrss / sizeof(struct Cell) * 1024, (2 + (1 << (size + 4))) * (2 + (1 << (size + 4))));
+	
+		fprintf(f, "%d , %d , %f|%f - %ld , %ld , %d\n", size, nb_iter, total_t, total_c, maxrss, maxrss / sizeof(struct Cell) * 1024, (2 + (1 << (size + 4))) * (2 + (1 << (size + 4))));
+*/
 	}
 }

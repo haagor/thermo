@@ -1,6 +1,6 @@
 /*
 * Auteurs : Simon Paris / Gregory Robin
-* 16/03/16
+* 19/03/16
 *
 * fonctions relatives aux matrices (initialisation, affichage...)
 */
@@ -11,7 +11,7 @@
 #include "matrix.h"
 
 
-// affiche la matrice de l'indice 0 a N, l'argument even sert a specifier la cellule cibler (0 pour cibler la cellule en fin d'iteration)
+// affiche la matrice de l'indice 0 a N, l'argument even sert a specifier la cellule de la struct a cibler (0 pour cibler la cellule en fin d'iteration)
 void print_matrix(struct Cell* matrix, int N, int even)
 {
 	for (int row = 0; row < N; row++)
@@ -28,6 +28,26 @@ void print_matrix(struct Cell* matrix, int N, int even)
 			}
 		}
 	}
+}
+
+// affiche la matrice pour satisfaire l'option -a
+void print_a(struct Cell* matrix, int N, int s)
+{
+	int quart = N / 2;
+	int pow2s = 1 << s;
+	printf("\nquart superieur modulo 2^s: ");
+	for (int row = 0; row < quart; row++)
+	{
+		for (int column = 0; column < quart; column++)
+		{
+			if (column % pow2s == 0 && column == row)
+			{
+				struct Cell* c = matrix + (row * N) + column;
+				printf("% 7.2f", c->cell1);
+			}
+		}
+	}
+	printf("\n\n");
 }
 
 // initialise la matrice a 0 avec une temperature T au centre
