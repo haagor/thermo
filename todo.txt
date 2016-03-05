@@ -1,0 +1,3 @@
+correction -a
+-a imprime la température au départ!
+argument par default dans le main

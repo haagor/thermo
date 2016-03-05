@@ -13,7 +13,7 @@
 #include <sys/resource.h>
 
 #include "heaTransfert.h"
-#include "utils.h"
+#include "fct.h"
 
 
 int debug = 0;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 			nb_globalIter = 10;
 		}
 
-		for (int i = 0; i < nb_globalIter; i++)
+		for (int gi = 0; gi < nb_globalIter; gi++)
 		{
 			start_t = time(NULL);
 			start_c = clock();
@@ -95,8 +95,8 @@ int main(int argc, char *argv[])
 
 			total_t = (double)(end_t - start_t);
 			total_c = (double)(end_c - start_c) / CLOCKS_PER_SEC;			
-			list_t[i] = total_t;
-			list_c[i] = total_c;
+			list_t[gi] = total_t;
+			list_c[gi] = total_c;
 		}
 
 		if (user == 1)
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
 
 		// Rapport: occupation memoire et ecriture dans un fichier pour constituer le rapport
-/*		FILE *f = fopen("../res.txt", "a");
+/*		FILE *f = fopen("./res.txt", "a");
 		if (f == NULL)
 		{
 			printf("Error opening file!\n");
@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
 		printf("RUSAGE :ru_maxrss => %ld [kilobytes], %ld [struct Cell], %d [nb Cell]\n", maxrss, maxrss / sizeof(struct Cell) * 1024, (2 + (1 << (size + 4))) * (2 + (1 << (size + 4))));
 	
 		fprintf(f, "%d , %d , %f|%f - %ld , %ld , %d\n", size, nb_iter, total_t, total_c, maxrss, maxrss / sizeof(struct Cell) * 1024, (2 + (1 << (size + 4))) * (2 + (1 << (size + 4))));
+		fclose(f);
 */
 	}
 }
