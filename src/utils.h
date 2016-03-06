@@ -1,9 +1,9 @@
 /*
-* Auteurs : Simon Paris / Gregory Robin
-* 16/03/16
-*
-* fonctions necessairent pour le calcule de moyenn
-*/
+ * Auteurs : Simon Paris / Gregory Robin
+ * 16/03/16
+ *
+ * fonctions necessairent pour le calcule de moyenn
+ */
 
 #include <stdio.h>
 
