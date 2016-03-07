@@ -98,7 +98,7 @@ void e1_verticale_iter_impair(struct Cell* matrix, int x, int y, int pac, int N)
             cUp   = matrix + (row - 1) * N + column;
             cDown = matrix + (row + 1) * N + column;
 
-            c->cell1 = (2 * (c->cell2 / 3)) + (cUp->cell2 / 6) + (cDown->cell2 / 6);
+            c->cell1 = (2 * (c->cell2 / 3)) + (cUp->cell2 / 6) + (cDown->cell2 / 6); //TODO une seule /6
         }
     }
 }
@@ -118,7 +118,7 @@ void e1_horizontale_iter_pair(struct Cell* matrix, int x, int y, int pac, int N)
             cLeft  = matrix + row * N + column - 1;
             cRight = matrix + row * N + column + 1;
 
-            c->cell2 = (2 * (c->cell1 / 3)) + (cLeft->cell1 / 6) + (cRight->cell1 / 6);
+            c->cell2 = (2 * (c->cell1 / 3)) + (cLeft->cell1 / 6) + (cRight->cell1 / 6); //TODO une seule /6
         }
     }
 }
