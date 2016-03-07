@@ -84,6 +84,7 @@ void e0_iter(struct Cell* matrix, int n, int N, float T, int nb_iter, int print)
     if (print)
     {
         print_a(matrix, N, n-4);
+        //print_matrix(matrix, N, 0);printf("\n");
     }
 }
 

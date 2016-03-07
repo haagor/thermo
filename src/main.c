@@ -173,10 +173,10 @@ int main(int argc, char *argv[])
                     switch (scenario)
                     {
                     case 0:
-                        e0_run(size, 36, nb_iter, localPrint);;
+                        e0_run(size, 36, nb_iter, localPrint);
                         break;
                     case 1:
-                        e1_run(size, 36, nb_iter, nb_thread, localPrint);;
+                        e1_run(size, 36, nb_iter, nb_thread, localPrint);
                         break;
                     default:
                         fprintf(stderr, "Scenario inconnu (%d)\n", scenario);
@@ -195,12 +195,12 @@ int main(int argc, char *argv[])
                 if (user == 1)
                 {
                     total_t = average(list_t, 10);
-                    printf("Etape: %d, Size: %d, total time taken by user: %f\n", scenario, size, total_t);
+                    printf("e: %d, s: %d, t: %d, total time taken by user: %f\n", scenario, size, nb_thread, total_t);
                 }
                 if (cpu == 1)
                 {
                     total_c = average(list_c, 10);
-                    printf("Etape: %d, Size: %d, total time taken by CPU: %f\n", scenario, size, total_c);
+                    printf("e: %d, s: %d, t: %d, total time taken by CPU: %f\n", scenario, size, nb_thread, total_c);
                 }
 
                 if (scenario == 0) 

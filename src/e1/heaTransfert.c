@@ -188,6 +188,8 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
     if (print)
     {
         print_a(matrix, N, n-4);
+        //print_matrix(matrix, N, 0);printf("\n");
+
     }
 }
 

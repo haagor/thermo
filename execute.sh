@@ -1,3 +1,3 @@
 #! /bin/bash
 
-./bin/main -s 024 -m -i 10000 -t 13 -e 01
+./bin/main -s 0 -i 100 -t 1 -e 01 -a
