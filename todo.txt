@@ -2,3 +2,9 @@ correction -a
 -a imprime la température au départ!
 argument par default dans le main FAUX!
 e0 pas de -t!
+
+différencier les barrières +2x plus rapides!
+un seul /6
+fixer -i (iteration) et faire varier le -t et comparer aussi avec e0. focus sur temps user et CPU et memoire
+
+pseudo code. 1iere courbe pas super interréssante. éviter la répétition d'info sur la même page (etape0). relief dans le rapport, mettre des titres.
