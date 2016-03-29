@@ -139,7 +139,7 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
             fprintf(stderr, "main waitG %d %d %d\n", ret, errno, w);
             exit(1);
         }
-        ret = pthread_barrier_destroy(barrierG);
+        /*ret = pthread_barrier_destroy(barrierG);
         if (ret) {
             fprintf(stderr, "main destroyG %d %d\n", ret, errno);
             exit(1);
@@ -148,14 +148,14 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
         if (ret) {
             fprintf(stderr, "main initG %d %d\n", ret, errno);
             exit(1);
-        }
+        }*/
 
         ret = pthread_barrier_wait(barrierH);
         if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
             fprintf(stderr, "main waitH %d %d %d\n", ret, errno, w);
             exit(1);
         }
-        ret = pthread_barrier_destroy(barrierH);
+        /*ret = pthread_barrier_destroy(barrierH);
         if (ret) {
             fprintf(stderr, "main destroyH %d %d\n", ret, errno);
             exit(1);
@@ -164,14 +164,14 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
         if (ret) {
             fprintf(stderr, "main initH %d %d\n", ret, errno);
             exit(1);
-        }
+        }*/
 
         ret = pthread_barrier_wait(barrierV);
         if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
             fprintf(stderr, "main waitV %d %d %d\n", ret, errno, w);
             exit(1);
         }
-        ret = pthread_barrier_destroy(barrierV);
+       /*ret = pthread_barrier_destroy(barrierV);
         if (ret) {
             fprintf(stderr, "main destroyV %d %d\n", ret, errno);
             exit(1);
@@ -180,7 +180,7 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
         if (ret) {
             fprintf(stderr, "main initV %d %d\n", ret, errno);
             exit(1);
-        }
+        }*/
 
         //print_matrix(matrix, N, 0);printf("\n");
 

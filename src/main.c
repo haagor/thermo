@@ -14,6 +14,7 @@
 
 #include "e0/heaTransfert.h"
 #include "e1/heaTransfert.h"
+#include "e2/heaTransfert.h"
 #include "utils.h"
 
 double TEMP_CHAUD = 36.0;
@@ -38,30 +39,30 @@ int main(int argc, char *argv[])
     while ((c = getopt(argc, argv, "s:mMat:i:e:")) != -1) {
         switch (c)
         {
-            case 's':
+        case 's':
             sizes=optarg;
             debug = 1;
             break;
-            case 'm':
+        case 'm':
             cpu = 1;
             break;
-            case 'M':
+        case 'M':
             user = 1;
             break;
-            case 'a':
+        case 'a':
             print=1;
             break;
-            case 'i':
+        case 'i':
             nb_iter = atoi(optarg);
             debug = 1;
             break;
-            case 't':
+        case 't':
             nb_threads = optarg;
             break;
-            case 'e':
+        case 'e':
             scenarios = optarg;
             break;
-            default:
+        default:
             fprintf(stderr, "%s: unknown option '%c'\n", argv[0], c);
             fprintf(stderr, usage, argv[0]);
             exit(1);
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
     for (int scenarioIdx = 0; scenarioIdx < strlen(scenarios); scenarioIdx++)
     {
         int scenario = scenarios[scenarioIdx] - '0';
-        if (scenario > 1) // TODO faire evoluer pour la suite
+        if (scenario > 2) // TODO faire evoluer pour la suite
         {
             fprintf(stderr, "Scenario trop grand (%d)\n", scenario);
             continue;
@@ -173,13 +174,16 @@ int main(int argc, char *argv[])
                     start_c = clock();
                     switch (scenario)
                     {
-                        case 0:
+                    case 0:
                         e0_run(size, TEMP_CHAUD, nb_iter, localPrint);
                         break;
-                        case 1:
+                    case 1:
                         e1_run(size, TEMP_CHAUD, nb_iter, nb_thread, localPrint);
                         break;
-                        default:
+                    case 2:
+                        e2_run(size, TEMP_CHAUD, nb_iter, nb_thread, localPrint);
+                        break;
+                    default:
                         fprintf(stderr, "Scenario inconnu (%d)\n", scenario);
                         continue;
                     }
@@ -221,12 +225,12 @@ int main(int argc, char *argv[])
                 fprintf(f, "%d , %d , %d , %d , %f|%f - %ld\n", scenario, size, nb_thread, nb_iter, total_t, total_c, maxrss);
                 fclose(f);
 
-                if (scenario == 0) 
+                if (scenario == 0)
                 {
                     break;
                 }
 */
             }
-        }   
+        }
     }
 }
