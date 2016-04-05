@@ -17,9 +17,6 @@
 #include "e2/heaTransfert.h"
 #include "utils.h"
 
-double TEMP_CHAUD = 36.0;
-
-
 int debug = 0;
 int main(int argc, char *argv[])
 {
@@ -175,13 +172,13 @@ int main(int argc, char *argv[])
                     switch (scenario)
                     {
                     case 0:
-                        e0_run(size, TEMP_CHAUD, nb_iter, localPrint);
+                        e0_run(size, nb_iter, localPrint);
                         break;
                     case 1:
-                        e1_run(size, TEMP_CHAUD, nb_iter, nb_thread, localPrint);
+                        e1_run(size, nb_iter, nb_thread, localPrint);
                         break;
                     case 2:
-                        e2_run(size, TEMP_CHAUD, nb_iter, nb_thread, localPrint);
+                        e2_run(size, nb_iter, nb_thread, localPrint);
                         break;
                     default:
                         fprintf(stderr, "Scenario inconnu (%d)\n", scenario);
@@ -209,7 +206,7 @@ int main(int argc, char *argv[])
                 }
 
 
-/*                // Rapport: occupation memoire et ecriture dans un fichier pour constituer le rapport
+                // Rapport: occupation memoire et ecriture dans un fichier pour constituer le rapport
                 FILE *f = fopen("./res/res.txt", "a");
                 if (f == NULL)
                 {
@@ -229,7 +226,6 @@ int main(int argc, char *argv[])
                 {
                     break;
                 }
-*/
             }
         }
     }

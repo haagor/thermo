@@ -6,4 +6,4 @@
 */
 
 // instancie, initialise la matrice et lance les iterations
-void e2_run(int size, float T, int nb_iter, int nb_thread, int print);
+void e2_run(int size, int nb_iter, int nb_thread, int print);

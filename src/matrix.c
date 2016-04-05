@@ -11,6 +11,7 @@
 #include "matrix.h"
 
 double TEMP_FROID = 0.0;
+double TEMP_CHAUD = 36.0;
 
 // affiche la matrice de l'indice 0 a N, l'argument even sert a specifier la cellule de la struct a cibler (0 pour cibler la cellule en fin d'iteration)
 void print_matrix(struct Cell* matrix, int N, int even)
@@ -52,12 +53,12 @@ void print_a(struct Cell* matrix, int N, int s)
 }
 
 // initialise la matrice a 0 avec une temperature T au centre
-void init_matrix(int n, float T, struct Cell* matrix)
+void init_matrix(int n, struct Cell* matrix)
 {
     int N = (1 << n) + 2;	// taille de la matrice	(+2 pour les bords froid)
 
     // calcul des cellules chauffees
-    float heat = 1 << (n - 1); 
+    float heat = 1 << (n - 1);
     int miHeat = heat - (1 << (n - 4));
     int maHeat = heat + (1 << (n - 4));
 
@@ -83,8 +84,8 @@ void init_matrix(int n, float T, struct Cell* matrix)
             c = matrix + (row * N) + column;
             if (column > miHeat && column <= maHeat && hot)
             {
-                c->cell1 = T;
-                c->cell2 = T;
+                c->cell1 = TEMP_CHAUD;
+                c->cell2 = TEMP_CHAUD;
                 c->constant = 1;
             }
             else if (column == N - 1 || column == 0 || cold)
@@ -96,52 +97,6 @@ void init_matrix(int n, float T, struct Cell* matrix)
                 c->cell1 = 0;
                 c->cell2 = 0;
                 c->constant = 0;
-            }
-        }
-    }
-}
-
-// retablit la temperature T au centre de la matrice
-void rinit_matrix(int n, float T, struct Cell* matrix)
-{
-    int N = (1 << n) + 2;	// taille de la matrice	(+2 pour le bord froid)
-
-    // calcul des cellules chauffees
-    float heat = 1 << (n - 1); 
-    int miHeat = heat - (1 << (n - 4));
-    int maHeat = heat + (1 << (n - 4));
-
-    int row, column;
-    int hot, cold;
-    struct Cell* c;
-    for (row = 0; row < N; row++)
-    {
-        if (row > miHeat && row <= maHeat)
-        {
-            hot = 1;
-        } else {
-            hot = 0;
-        }
-        if (row == 0 || row == N-1)
-        {
-            cold = 1;
-        } else {
-            cold = 0;
-        }
-        for (column = 0; column < N; column++)
-        {
-            c = matrix + (row * N) + column;
-            if (column > miHeat && column <= maHeat && hot)
-            {
-                c->cell1 = T;
-                c->cell2 = T;
-                c->constant = 1;
-            }
-            else if (column == N-1 || column == 0 || cold)
-            {
-                c->cell1 = TEMP_FROID;
-                c->cell2 = TEMP_FROID;
-                c->constant = 1;
             }
         }
     }
