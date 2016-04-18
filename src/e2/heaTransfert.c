@@ -2,7 +2,7 @@
 * Author : Simon Paris
 * 2016-04-05
 *
-* fonctions relatives aux itérations de transfert de chaleur
+* fonctions relatives aux iterations de transfert de chaleur
 */
 
 #include <stdio.h>
@@ -63,7 +63,7 @@ void* e2_thread_run(void* args)
 {
     struct SubMatrix* sub_mat = (struct SubMatrix*)args;
     int ret;
-    for (int w = 0; w < sub_mat->nb_iter; w++) // nombre d'itération verticale
+    for (int w = 0; w < sub_mat->nb_iter; w++) // nombre d'iteration verticale
     {
         e2_horizontale_iter_pair(sub_mat->matrix, sub_mat->x, sub_mat->y, sub_mat->size, sub_mat->N);
         ret = e2_pthread_barrier_wait(barrierV);
@@ -142,7 +142,13 @@ void e2_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
              int n, int N, int nb_iter, int nb_thread, int print)
 {
     int ret;
-    for (int w = 0; w < nb_iter; w++) // nombre d'itération verticale
+
+    if (print)
+    {
+        print_a(matrix, N, n-4);
+    }
+
+    for (int w = 0; w < nb_iter; w++) // nombre d'iteration verticale
     {
         ret = e2_pthread_barrier_wait(barrierV);
         if (ret) {

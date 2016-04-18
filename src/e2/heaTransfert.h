@@ -2,7 +2,7 @@
 * Author : Simon Paris
 * 2016-04-05
 *
-* fonctions relatives aux itérations de transfert de chaleur
+* fonctions relatives aux iterations de transfert de chaleur
 */
 
 // instancie, initialise la matrice et lance les iterations

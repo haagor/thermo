@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
                     printf("e: %d, s: %d, t: %d, total time taken by CPU: %f\n", scenario, size, nb_thread, total_c);
                 }
 
-
+/*
                 // Rapport: occupation memoire et ecriture dans un fichier pour constituer le rapport
                 FILE *f = fopen("./res/res.txt", "a");
                 if (f == NULL)
@@ -226,6 +226,7 @@ int main(int argc, char *argv[])
                 {
                     break;
                 }
+*/
             }
         }
     }

@@ -142,6 +142,12 @@ void e2_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
              int n, int N, int nb_iter, int nb_thread, int print)
 {
     int ret;
+
+    if (print)
+    {
+        print_a(matrix, N, n-4);
+    }
+
     for (int w = 0; w < nb_iter; w++) // nombre d'itération verticale
     {
         ret = e2_pthread_barrier_wait(barrierV);
