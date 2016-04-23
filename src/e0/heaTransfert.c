@@ -67,7 +67,7 @@ void e0_horizontale_iter_pair(struct Cell* matrix, int N)
 // execute une iteration, cad transfert horizontale, verticale, et temperature du centre remit a ca valeur T
 void e0_iter(struct Cell* matrix, int n, int N, int nb_iter, int print, int miHeat, int maHeat)
 {
-    for (int w = 0; w < nb_iter; w++) // nombre d'itération verticale
+    for (int w = 0; w < nb_iter; w++) // nombre d'iteration verticale
     {
         e0_horizontale_iter_pair(matrix, N);
         e0_verticale_iter_impair(matrix, N, miHeat, maHeat);

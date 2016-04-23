@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
                 int cellCount = (1 << (size + 4)) * (1 << (size + 4));
                 if (cellCount < threadCount)
                 {
-                    fprintf(stderr, "Trop de threads (%d) pour la taille donnée (%d)\n", nb_thread, size);
+                    fprintf(stderr, "Trop de threads (%d) pour la taille donnee (%d)\n", nb_thread, size);
                     continue;
                 }
 

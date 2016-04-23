@@ -145,7 +145,7 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
              int n, int N, int nb_iter, int nb_thread, int print)
 {
     int ret;
-    for (int w = 0; w < nb_iter; w++) // nombre d'itération verticale
+    for (int w = 0; w < nb_iter; w++) // nombre d'iteration verticale
     {
         ret = pthread_barrier_wait(barrierV);
         if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
