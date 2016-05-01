@@ -15,6 +15,7 @@
 #include "e0/heaTransfert.h"
 #include "e1/heaTransfert.h"
 #include "e2/heaTransfert.h"
+#include "e3/heaTransfert.h"
 #include "utils.h"
 
 int debug = 0;
@@ -115,11 +116,11 @@ int main(int argc, char *argv[])
         }
     }
 
-    // ----- boucle 'for' pour enchainer les etape (-e 01) -----
+    // ----- boucle 'for' pour enchainer les etape (-e 0123) -----
     for (int scenarioIdx = 0; scenarioIdx < strlen(scenarios); scenarioIdx++)
     {
         int scenario = scenarios[scenarioIdx] - '0';
-        if (scenario > 2) // TODO faire evoluer pour la suite
+        if (scenario > 3) // TODO faire evoluer pour la suite
         {
             fprintf(stderr, "Scenario trop grand (%d)\n", scenario);
             continue;
@@ -180,6 +181,9 @@ int main(int argc, char *argv[])
                     case 2:
                         e2_run(size, nb_iter, nb_thread, localPrint);
                         break;
+                    case 3:
+                        e3_run(size, nb_iter, nb_thread, localPrint);
+                        break;
                     default:
                         fprintf(stderr, "Scenario inconnu (%d)\n", scenario);
                         continue;
@@ -205,7 +209,7 @@ int main(int argc, char *argv[])
                     printf("e: %d, s: %d, t: %d, total time taken by CPU: %f\n", scenario, size, nb_thread, total_c);
                 }
 
-
+/*
                 // Rapport: occupation memoire et ecriture dans un fichier pour constituer le rapport
                 FILE *f = fopen("./res/res.txt", "a");
                 if (f == NULL)
@@ -226,6 +230,7 @@ int main(int argc, char *argv[])
                 {
                     break;
                 }
+*/
             }
         }
     }

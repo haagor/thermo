@@ -8,15 +8,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <semaphore.h>
 
+#include "heaTransfertInt.h"
 #include "heaTransfert.h"
 
+struct my_barrier* barrierV;
+struct my_barrier* barrierH;
 
-pthread_barrier_t* barrierV;
-pthread_barrier_t* barrierH;
-
-
-void e1_fill_thread_array(pthread_t* threads, struct SubMatrix* thread_args,
+void e3_fill_thread_array(pthread_t* threads, struct SubMatrix* thread_args,
                           struct Cell* matrix, int n, int N, int nb_iter,
                           int matrix_size, int t)
 {
@@ -42,7 +42,7 @@ void e1_fill_thread_array(pthread_t* threads, struct SubMatrix* thread_args,
             thread_args[threadIdx].maHeat   = maHeat;
             thread_args[threadIdx].nb_iter  = nb_iter;
 
-            rc = pthread_create(&threads[threadIdx], 0, e1_thread_run, &thread_args[threadIdx]);
+            rc = pthread_create(&threads[threadIdx], 0, e3_thread_run, &thread_args[threadIdx]);
             if (rc != 0) {
                 fprintf(stderr, "error: pthread_create, rc: %d\n", rc);
                 exit(1);
@@ -52,7 +52,7 @@ void e1_fill_thread_array(pthread_t* threads, struct SubMatrix* thread_args,
     }
 }
 
-void e1_print_array(struct SubMatrix* array, int t)
+void e3_print_array(struct SubMatrix* array, int t)
 {
     for (int i = 0; i < (1 << (t * 2)); i++)
     {
@@ -60,24 +60,23 @@ void e1_print_array(struct SubMatrix* array, int t)
     }
 }
 
-void* e1_thread_run(void* args)
+void* e3_thread_run(void* args)
 {
     struct SubMatrix* sub_mat = (struct SubMatrix*)args;
     int ret;
     for (int w = 0; w < sub_mat->nb_iter; w++) // nombre d'iteration verticale
     {
-        e1_horizontale_iter_pair(sub_mat->matrix, sub_mat->x, sub_mat->y, sub_mat->size, sub_mat->N);
-        ret = pthread_barrier_wait(barrierV);
-        if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
+        e3_horizontale_iter_pair(sub_mat->matrix, sub_mat->x, sub_mat->y, sub_mat->size, sub_mat->N);
+        ret = e3_pthread_barrier_wait(barrierV);
+        if (ret) {
             fprintf(stderr, "waitG %d %d\n", ret, errno);
             exit(1);
         }
 
-        e1_verticale_iter_impair(sub_mat->matrix, sub_mat->x, sub_mat->y, sub_mat->size,
-                                 sub_mat->N,
-                                 sub_mat->miHeat, sub_mat->maHeat);
-        ret = pthread_barrier_wait(barrierH);
-        if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
+        e3_verticale_iter_impair(sub_mat->matrix, sub_mat->x, sub_mat->y, sub_mat->size,
+                                 sub_mat->N, sub_mat->miHeat, sub_mat->maHeat);        
+        ret = e3_pthread_barrier_wait(barrierH);
+        if (ret) {
             fprintf(stderr, "waitH %d %d\n", ret, errno);
             exit(1);
         }
@@ -87,10 +86,9 @@ void* e1_thread_run(void* args)
 }
 
 // transmet la chaleur verticalement
-void e1_verticale_iter_impair(struct Cell* matrix, int x, int y, int pac,
+void e3_verticale_iter_impair(struct Cell* matrix, int x, int y, int pac,
                               int N,
-                              int miHeat, int maHeat)
-{
+                              int miHeat, int maHeat) {
     struct Cell* cUp;
     struct Cell* cDown;
     struct Cell* c;
@@ -121,7 +119,7 @@ void e1_verticale_iter_impair(struct Cell* matrix, int x, int y, int pac,
 }
 
 // transmet la chaleur horizontalement
-void e1_horizontale_iter_pair(struct Cell* matrix, int x, int y, int pac, int N)
+void e3_horizontale_iter_pair(struct Cell* matrix, int x, int y, int pac, int N)
 {
     struct Cell* cLeft;
     struct Cell* cRight;
@@ -131,7 +129,7 @@ void e1_horizontale_iter_pair(struct Cell* matrix, int x, int y, int pac, int N)
     {
         for (int column = x; column < x + pac; column++)
         {
-            c = matrix + row * N + column;
+            c      = matrix + row * N + column;
             cLeft  = matrix + row * N + column - 1;
             cRight = matrix + row * N + column + 1;
 
@@ -141,7 +139,7 @@ void e1_horizontale_iter_pair(struct Cell* matrix, int x, int y, int pac, int N)
 }
 
 // execute une iteration, cad transfert horizontale, verticale, et temperature du centre remit a ca valeur T
-void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
+void e3_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
              int n, int N, int nb_iter, int nb_thread, int print)
 {
     int ret;
@@ -150,21 +148,20 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
     {
         print_a(matrix, N, n-4);
     }
-    
+
     for (int w = 0; w < nb_iter; w++) // nombre d'iteration verticale
     {
-        ret = pthread_barrier_wait(barrierV);
-        if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
+        ret = e3_pthread_barrier_wait(barrierV);
+        if (ret) {
             fprintf(stderr, "main waitG %d %d %d\n", ret, errno, w);
             exit(1);
         }
 
-        ret = pthread_barrier_wait(barrierH);
-        if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD) {
+        ret = e3_pthread_barrier_wait(barrierH);
+        if (ret) {
             fprintf(stderr, "main waitH %d %d %d\n", ret, errno, w);
             exit(1);
         }
-
         //print_matrix(matrix, N, 0);printf("\n");
     }
     if (print)
@@ -176,7 +173,7 @@ void e1_iter(struct Cell* matrix, struct SubMatrix* sub_mat,
 }
 
 // instancie, initialise la matrice et lance les iterations
-void e1_run(int size, int nb_iter, int nb_thread, int print)
+void e3_run(int size, int nb_iter, int nb_thread, int print)
 {
     int n = size + 4;						  	// [0-9]
     int N = (1 << n) + 2;						// taille de la matrice	(+2 pour le bord froid)
@@ -184,12 +181,20 @@ void e1_run(int size, int nb_iter, int nb_thread, int print)
 
     struct SubMatrix sub_mat[1 << (nb_thread * 2)];
     pthread_t threads[1 << (nb_thread * 2)];
-    barrierV = malloc(sizeof(pthread_barrier_t));
-    barrierH = malloc(sizeof(pthread_barrier_t));
 
     // activer les barrieres avant de lancer les threads
-    pthread_barrier_init(barrierV, 0, (1 << (nb_thread * 2)) + 1); // +1 thread main
-    pthread_barrier_init(barrierH, 0, (1 << (nb_thread * 2)) + 1); // +1 thread main
+    barrierV = (struct my_barrier*)malloc(sizeof(struct my_barrier));
+    barrierV->mutex = (sem_t*)malloc(sizeof(sem_t));
+    barrierV->turnstile = (sem_t*)malloc(sizeof(sem_t));
+    barrierV->turnstile2 = (sem_t*)malloc(sizeof(sem_t));
+
+    barrierH = (struct my_barrier*)malloc(sizeof(struct my_barrier));
+    barrierH->mutex = (sem_t*)malloc(sizeof(sem_t));
+    barrierH->turnstile = (sem_t*)malloc(sizeof(sem_t));
+    barrierH->turnstile2 = (sem_t*)malloc(sizeof(sem_t));
+
+    e3_pthread_barrier_init(barrierV, (1 << (nb_thread * 2)) + 1); // +1 thread main
+    e3_pthread_barrier_init(barrierH, (1 << (nb_thread * 2)) + 1); // +1 thread main
 
     matrice = (struct Cell*)malloc(N*N*sizeof(struct Cell));
     if (matrice == 0)
@@ -201,15 +206,109 @@ void e1_run(int size, int nb_iter, int nb_thread, int print)
 
     //printf("s:%d t:%d\n", size, nb_thread);
     //printf("s:%d t:%d nbCell: %d\n", 1 << (4 + size), 1 << (nb_thread * 2), (1 << (4 + size)) * (1 << (4 + size)));
-    e1_fill_thread_array(threads, sub_mat, matrice, n, N, nb_iter, 1 << (4 + size), nb_thread);
+    e3_fill_thread_array(threads, sub_mat, matrice, n, N, nb_iter, 1 << (4 + size), nb_thread);
     //print_array(sub_mat, nb_thread);
 
-    e1_iter(matrice, sub_mat, n, N, nb_iter, nb_thread, print);
+    e3_iter(matrice, sub_mat, n, N, nb_iter, nb_thread, print);
     //print_matrix(matrice, N, 0);printf("\n");
 
     free(matrice);
-    pthread_barrier_destroy(barrierV);
-    free(barrierV);
-    pthread_barrier_destroy(barrierH);
-    free(barrierH);
+    e3_pthread_barrier_destroy(barrierV);
+    e3_pthread_barrier_destroy(barrierH);
+}
+
+int e3_pthread_barrier_init(struct my_barrier* barrier, int count)
+{
+    //fprintf(stderr, "init %d\n", count);
+
+    //int sem_init(sem_t *sem, int pshared, unsigned int value);
+    int ret = 0;
+    ret = sem_init(barrier->turnstile, 0, 0);
+    if (ret) return ret;
+    
+    ret = sem_init(barrier->turnstile2, 0, 1);
+    if (ret) return ret;
+    
+    ret = sem_init(barrier->mutex, 0, 1);
+    if (ret) return ret;
+
+    barrier->value = 0;
+    barrier->max   = count;
+
+    return ret;
+}
+
+int e3_pthread_barrier_destroy(struct my_barrier* barrier)
+{
+    //fprintf(stderr, "destroy\n");
+
+    //int sem_destroy(sem_t *sem);
+    int ret = 0;
+    ret = sem_destroy(barrier->turnstile);
+    if (ret) {
+        fprintf(stderr, "destroy turnstile %d %d\n", ret, errno);
+        return ret;
+    }
+
+    ret = sem_destroy(barrier->turnstile2);
+    if (ret) {
+        fprintf(stderr, "destroy turnstile2 %d %d\n", ret, errno);
+        return ret;
+    }
+
+    ret = sem_destroy(barrier->mutex);
+    if (ret) {
+        fprintf(stderr, "destroy mutex %d %d\n", ret, errno);
+        return ret;
+    }
+
+    return 0;
+}
+
+int e3_pthread_barrier_wait(struct my_barrier* barrier)
+{
+    //fprintf(stderr, "wait %d\n", barrier->value);
+
+
+    int ret = 0;
+    ret = sem_wait(barrier->mutex);
+    if (ret) return ret;
+
+    barrier->value++;
+    if (barrier->value == barrier->max) 
+    {
+        ret = sem_wait(barrier->turnstile2);
+        if (ret) return ret;        
+        ret = sem_post(barrier->turnstile);
+        if (ret) return ret;
+    }
+    ret = sem_post(barrier->mutex);
+    if (ret) return ret;
+
+    ret = sem_wait(barrier->turnstile);
+    if (ret) return ret;        
+    ret = sem_post(barrier->turnstile);
+    if (ret) return ret;
+
+
+    ret = sem_wait(barrier->mutex);
+    if (ret) return ret;
+
+    barrier->value--;
+    if (barrier->value == 0) 
+    {
+        ret = sem_wait(barrier->turnstile);
+        if (ret) return ret;        
+        ret = sem_post(barrier->turnstile2);
+        if (ret) return ret;
+    }
+    ret = sem_post(barrier->mutex);
+    if (ret) return ret;
+
+    ret = sem_wait(barrier->turnstile2);
+    if (ret) return ret;        
+    ret = sem_post(barrier->turnstile2);
+    if (ret) return ret;
+
+    return ret;
 }
